@@ -1,0 +1,43 @@
+name: Verificação contínua
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    # Baselines de imagem deste projeto foram produzidas no Windows.
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      CI: 'true'
+      VITE_SUPABASE_URL: ''
+      VITE_SUPABASE_PUBLISHABLE_KEY: ''
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm.cmd ci
+      - run: npm.cmd run lint
+      - run: npm.cmd run format:check
+      - run: npm.cmd test
+      - run: npm.cmd run build
+      - run: npx.cmd playwright install chromium
+      - run: npm.cmd run test:e2e
+      - name: Evidências de teste
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: resultados-de-testes
+          path: |
+            coverage/
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7

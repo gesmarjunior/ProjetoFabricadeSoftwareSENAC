@@ -1,0 +1,25 @@
+:root {
+  color-scheme: light;
+  --accent: #087a58;
+  --strong: #04523f;
+  --soft: #e6f2ed;
+  --background: #f4f7f6;
+  --sidebar: #063d31;
+  --ink: #162e2a;
+  --muted: #52665f;
+  --border: #dce5e1;
+  --surface: #fff;
+  --radius: 14px;
+  --shadow: 0 3px 18px #132e2310;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+:root[data-theme='dengue'] {
+  --accent: #1769df;
+  --strong: #0b3479;
+  --soft: #eaf1fd;
+  --background: #f4f7fc;
+  --sidebar: #0a2855;
+  --ink: #142a4a;
+  --muted: #52647b;
+  --border: #dce3ee;
+}

@@ -1,0 +1,20 @@
+# Dependências, builds e resultados locais
+node_modules/
+dist/
+coverage/
+test-results/
+playwright-report/
+.verification/
+.npm-cache/
+
+# Configurações locais e credenciais
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Arquivos temporários do sistema e ferramentas
+*.log
+.DS_Store
+Thumbs.db
