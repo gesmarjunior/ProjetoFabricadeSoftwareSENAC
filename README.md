@@ -28,4 +28,24 @@ Sem variáveis de ambiente, os aplicativos funcionam em **Demonstração**, com 
 
 A classificação atual usa regras explicadas e revisão humana. Não há IA visual real nem envio automático para órgãos públicos. O Radar apoia a prevenção ambiental e não substitui equipes de saúde ou vigilância.
 
-O projeto Supabase foi criado pelo usuário no plano Free e configurado durante esta colaboração. O envio do código ao GitHub não publica os aplicativos. Os modelos de workflows em cada pasta precisam ser configurados na raiz do repositório antes de usar o GitHub Actions; os de publicação no GitHub Pages são manuais. Os resultados e os limites das verificações estão em `docs/verification.md` de cada aplicativo.
+O projeto Supabase foi criado pelo usuário no plano Free e configurado durante esta colaboração. Os resultados e os limites das verificações estão em `docs/verification.md` de cada aplicativo.
+
+## GitHub Pages
+
+A publicação reúne uma página inicial e os dois aplicativos:
+
+- [Página inicial](https://gesmarjunior.github.io/ProjetoFabricadeSoftwareSENAC/)
+- [FiscalizaLixo IA](https://gesmarjunior.github.io/ProjetoFabricadeSoftwareSENAC/fiscaliza-lixo-ia/)
+- [Radar da Dengue Inteligente](https://gesmarjunior.github.io/ProjetoFabricadeSoftwareSENAC/radar-dengue-inteligente/)
+
+O workflow ativo fica em `.github/workflows/pages.yml`, na raiz deste repositório. Em **Settings → Pages**, a fonte é **GitHub Actions**. Em **Settings → Secrets and variables → Actions → Variables**, configure `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY`. As duas variáveis são públicas no JavaScript gerado; nunca use chaves de servidor. A publicação falha se faltar a configuração publicável, para evitar publicar acidentalmente a demonstração.
+
+Em **Actions → Publicar aplicativos no GitHub Pages → Run workflow**, execute a publicação da branch `main`. Ela instala as dependências, gera os dois builds e executa `scripts/assemble-pages.mjs`, que monta somente os arquivos públicos em `_site/`. O envio do código por push não publica automaticamente. Os workflows dentro das pastas dos aplicativos são modelos para uso dessas pastas como repositórios independentes.
+
+Para conferir o mesmo pacote localmente:
+
+```powershell
+npm.cmd run build --prefix fiscaliza-lixo-ia
+npm.cmd run build --prefix radar-dengue-inteligente
+node scripts/assemble-pages.mjs
+```

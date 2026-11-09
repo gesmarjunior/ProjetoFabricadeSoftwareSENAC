@@ -1,6 +1,7 @@
 # Dependências, builds e resultados locais
 node_modules/
 dist/
+_site/
 coverage/
 test-results/
 playwright-report/

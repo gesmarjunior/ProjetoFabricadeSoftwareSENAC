@@ -1,0 +1,71 @@
+name: Publicar aplicativos no GitHub Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: read
+    env:
+      VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL || secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY || secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            fiscaliza-lixo-ia/package-lock.json
+            radar-dengue-inteligente/package-lock.json
+      - name: Validar configuração pública do Supabase
+        run: |
+          node --input-type=module <<'NODE'
+          const url = process.env.VITE_SUPABASE_URL;
+          const key = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+          if (!url || !key?.startsWith('sb_publishable_')) {
+            throw new Error('Configure a URL e a chave publicável do Supabase nas variáveis do repositório.');
+          }
+          if (new URL(url).protocol !== 'https:') {
+            throw new Error('A URL do Supabase precisa usar HTTPS.');
+          }
+          NODE
+      - name: Instalar dependências dos dois aplicativos
+        run: |
+          npm ci --prefix fiscaliza-lixo-ia
+          npm ci --prefix radar-dengue-inteligente
+      - name: Gerar os dois builds de produção
+        run: |
+          npm run build --prefix fiscaliza-lixo-ia
+          npm run build --prefix radar-dengue-inteligente
+      - name: Reunir a página inicial e os aplicativos
+        run: node scripts/assemble-pages.mjs
+      - uses: actions/configure-pages@v6.0.0
+      - uses: actions/upload-pages-artifact@v5.0.0
+        with:
+          path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar os aplicativos
+        id: deployment
+        uses: actions/deploy-pages@v5.0.1

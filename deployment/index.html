@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Conheça o FiscalizaLixo IA e o Radar da Dengue Inteligente, projetos comunitários da Fábrica de Software SENAC."
+    />
+    <title>Fábrica de Software SENAC — Projetos comunitários</title>
+    <style>
+      :root {
+        font-family: system-ui, sans-serif;
+        color: #143344;
+        background: #f3f7fa;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      main {
+        max-width: 1000px;
+        margin: auto;
+        padding: 72px 24px;
+      }
+      .eyebrow {
+        color: #396373;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+      }
+      h1 {
+        font-size: clamp(2rem, 5vw, 3.2rem);
+        line-height: 1.15;
+        max-width: 760px;
+        margin: 20px 0;
+      }
+      .intro {
+        max-width: 620px;
+        color: #415e6c;
+        font-size: 1.1rem;
+        line-height: 1.7;
+      }
+      .projects {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+        margin-top: 40px;
+      }
+      article {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 32px;
+        border: 1px solid #d7e2e9;
+        border-top: 5px solid #087b60;
+        border-radius: 16px;
+        background: #fff;
+      }
+      article:last-child {
+        border-top-color: #1856ce;
+      }
+      h2 {
+        margin: 0;
+        font-size: 1.4rem;
+      }
+      article p {
+        color: #415e6c;
+        line-height: 1.7;
+        margin-bottom: 28px;
+      }
+      a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 48px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin-top: auto;
+        background: #087b60;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+      }
+      article:last-child a {
+        background: #1856ce;
+      }
+      a:hover {
+        filter: brightness(0.9);
+      }
+      a:focus-visible {
+        outline: 3px solid #143344;
+        outline-offset: 4px;
+      }
+      footer {
+        margin-top: 48px;
+        color: #415e6c;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+      @media (max-width: 640px) {
+        main {
+          padding: 40px 20px;
+        }
+        .projects {
+          grid-template-columns: 1fr;
+        }
+        article {
+          padding: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">Fábrica de Software · SENAC</p>
+      <h1>Tecnologia para cuidar da comunidade.</h1>
+      <p class="intro">
+        Escolha um dos projetos para registrar situações do bairro, acompanhar
+        informações e participar do cuidado com a cidade.
+      </p>
+      <section class="projects" aria-label="Aplicativos comunitários">
+        <article>
+          <h2>FiscalizaLixo IA</h2>
+          <p>
+            Registre resíduos descartados irregularmente, acompanhe as
+            ocorrências e consulte orientações para o descarte correto.
+          </p>
+          <a href="./fiscaliza-lixo-ia/">Abrir FiscalizaLixo IA</a>
+        </article>
+        <article>
+          <h2>Radar da Dengue Inteligente</h2>
+          <p>
+            Registre possíveis criadouros, acompanhe o risco ambiental e conheça
+            cuidados para ajudar na prevenção.
+          </p>
+          <a href="./radar-dengue-inteligente/">Abrir Radar da Dengue</a>
+        </article>
+      </section>
+      <footer>
+        Projetos educativos de participação comunitária. Os registros e as
+        classificações não substituem o atendimento dos órgãos públicos.
+      </footer>
+    </main>
+  </body>
+</html>
