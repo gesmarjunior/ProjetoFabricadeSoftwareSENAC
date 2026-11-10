@@ -5,6 +5,7 @@ const navigation = [
   ['/', 'Início', 'home'],
   ['/new', 'Novo registro', 'plus'],
   ['/map', 'Mapa', 'map'],
+  ['/collection-points', 'Pontos de coleta', 'leaf'],
   ['/dashboard', 'Indicadores', 'chart'],
   ['/guidance', config.guidanceLabel, 'leaf'],
   ['/tracking', 'Acompanhamento', 'track'],
@@ -29,7 +30,9 @@ export function layout(mode) {
         '',
       )}<button type="button" id="more-menu" aria-expanded="false" aria-controls="mobile-menu">${icon('info')}<span>Mais</span></button></nav>
     <nav id="mobile-menu" class="mobile-menu" aria-label="Mais páginas" hidden>${navigation
-      .filter(([path]) => ['/dashboard', '/guidance', '/about'].includes(path))
+      .filter(([path]) =>
+        ['/collection-points', '/dashboard', '/guidance', '/about'].includes(path),
+      )
       .map(([path, label, name]) => `<a href="#${path}">${icon(name)}${label}</a>`)
       .join('')}</nav>
     <div id="notification" class="notification" role="status" aria-live="polite"></div>`;

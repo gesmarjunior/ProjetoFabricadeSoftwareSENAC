@@ -33,3 +33,9 @@ group by grantee, privilege_type order by grantee, privilege_type;
 -- authenticated pode ler, inserir o payload e atualizar somente status.
 -- Policies gerais de Storage também precisam ser revistas: combinam permissões por OR.
 -- Anonymous Sign-Ins é uma configuração separada do painel Auth.
+
+-- Catálogo de coleta: se já existir, não reaplique a migração 004.
+select to_regclass('public.fiscaliza_collection_points') is not null as collection_table_exists,
+  (select relrowsecurity from pg_class where oid=to_regclass('public.fiscaliza_collection_points')) as collection_rls_enabled;
+select policyname,roles,cmd,qual,with_check from pg_policies
+where schemaname='public' and tablename='fiscaliza_collection_points';

@@ -1,5 +1,19 @@
 # Verificação da entrega — FiscalizaLixo IA
 
+## Atualização de ecopontos — 10/11/2026
+
+O catálogo de coleta acrescenta os cinco ecopontos de Itumbiara fornecidos pelo usuário. A prefeitura confirmou a existência das unidades e a destinação geral, com fontes e limites registrados em [collection-points.md](collection-points.md). O usuário autorizou usar os centros aproximados de cada bairro/povoado; os marcadores não representam a entrada das unidades. Detalhes de materiais e endereço não confirmados pela fonte municipal são identificados. A unidade de Santa Rita recebe somente pneus; os ecopontos não recebem lixo doméstico comum.
+
+Lint, formatação, **245 testes unitários** e build passaram. A suíte final de Chromium passou em **47 testes**, incluindo seis casos novos de catálogo, cadastro, correção, filtros, responsividade e Axe. As duas baselines alteradas (mapa e orientação no celular) foram inspecionadas antes da atualização; a execução final comparou os 16 snapshots sem aceitar novas alterações. Não houve mudanças no Radar da Dengue.
+
+O plugin Browser não estava disponível; foi usado o Playwright já instalado. A inspeção adicional com Supabase e tiles reais verificou mapa e formulário em 1440×1000 e 390×844, seleção de coordenadas pelo mapa, filtros e ausência de overflow ou erros de console. No celular, os filtros ficam recolhidos inicialmente para dar espaço ao mapa. Capturas, logs e scripts temporários ficam em `%TEMP%/senac-ecopontos-20261110`, fora do repositório.
+
+As migrações `004_collection_points.sql` e `005_itumbiara_collection_catalog.sql` foram aplicadas no Supabase com retorno Success. **16 verificações em PGlite** confirmaram seed idempotente, preservação de ajustes posteriores, INSERT pendente, isolamento por autor, leitura pública somente de publicados, ocultação do identificador de autoria e bloqueio de alterações/publicação pelo cliente. O PGlite usa Auth simulado.
+
+Separadamente, um teste transacional no **Supabase real** confirmou INSERT de sugestão própria, leitura pelo autor, bloqueio de leitura por outro visitante, ocultação de autoria, bloqueio de UPDATE/DELETE e de publicação pelo cliente, rejeição de lixo doméstico em ecoponto e leitura pública dos cinco locais. A transação foi revertida: **cinco unidades publicadas e zero sugestões pendentes de teste** ao final. Nenhum registro de ocorrências ou foto existente foi alterado. A conferência de grants e catálogo confirmou RLS ativo, cinco posições aproximadas e ausência de UPDATE para visitantes.
+
+O cadastro e a sugestão de correções estão disponíveis na interface; publicação e ajustes oficiais exigem a conta responsável no Supabase. Não existe administrador no cliente. Horários, licenças, acesso e posições exatas não são certificados pelo aplicativo. Os registros históricos abaixo documentam verificações anteriores e não substituem esta rodada.
+
 Atualização documental: 05/11/2026. Última verificação consolidada: 05/11/2026. Ambiente: Windows, Node.js 24.16.0, npm 11.13.0 e Chromium do Playwright 1.64.1. O plugin Browser não estava disponível; foi usado Playwright diretamente.
 
 Os resultados atuais incluem a revisão concluída em 05/11, com as etapas de verificação aprovadas nos dois apps e inspeção visual com Supabase e mapas reais. As etapas anteriores e a inspeção do build em subcaminho estão identificadas por data. As 16 baselines de cada app foram comparadas na execução final. A primeira revisão atualizou 19 imagens; a segunda revisão de linguagem atualizou as 32, após inspeção das capturas.

@@ -8,6 +8,12 @@ import { reviewPage, bindReview } from './pages/review.js';
 import { explorePage, bindExplore } from './pages/explore.js';
 import { detailsPage, bindDetails } from './pages/details.js';
 import { dashboardPage, mountCharts } from './pages/dashboard.js';
+import {
+  collectionPointsPage,
+  bindCollectionPoints,
+  collectionPointForm,
+  bindCollectionPointForm,
+} from './pages/collectionPoints.js';
 import { guidancePage, aboutPage } from './pages/education.js';
 
 /** Coordena navegação e dados; cada página mantém sua apresentação e eventos. */
@@ -106,6 +112,55 @@ export async function startApp() {
     main.innerHTML = '<p role="status" class="loading">Carregando os registros…</p>';
     const pending = [];
     try {
+      if (
+        route === '/collection-points' ||
+        route === '/collection-points/new' ||
+        route.startsWith('/collection-points/suggest/')
+      ) {
+        const points = await app.pointRepo.list();
+        if (version !== renderVersion) return;
+        if (route === '/collection-points') {
+          main.innerHTML = collectionPointsPage(points);
+          const { mountMap } = await import('./components/map.js');
+          if (version !== renderVersion) return;
+          const map = mountMap(document.querySelector('#collection-map'), points, {
+            collection: true,
+          });
+          pending.push(() => map.destroy());
+          pending.push(bindCollectionPoints(points, map));
+        } else {
+          const original = route.startsWith('/collection-points/suggest/')
+            ? points.find(
+                (point) =>
+                  point.id === route.slice('/collection-points/suggest/'.length) &&
+                  point.publication_status === 'published',
+              )
+            : null;
+          if (route.startsWith('/collection-points/suggest/') && !original)
+            throw new Error('Local não encontrado.');
+          main.innerHTML = collectionPointForm(original);
+          pending.push(bindCollectionPointForm(app, original));
+          const { mountPointPicker } = await import('./components/map.js');
+          if (version !== renderVersion) {
+            pending.forEach((dispose) => dispose?.());
+            return;
+          }
+          pending.push(
+            mountPointPicker(
+              document.querySelector('#point-picker'),
+              (lat, lng) => {
+                document.querySelector('#site-lat').value = lat.toFixed(6);
+                document.querySelector('#site-lng').value = lng.toFixed(6);
+                document.querySelector('#picked-location').textContent =
+                  'Referência aproximada selecionada. Confira os valores antes de enviar.';
+              },
+              original,
+            ),
+          );
+        }
+        cleanup = () => pending.forEach((dispose) => dispose?.());
+        return;
+      }
       const rows = await app.repo.list();
       if (version !== renderVersion) return;
       if (route === '/') {

@@ -407,6 +407,137 @@
   border-radius: 10px;
   margin-bottom: 20px;
 }
+.collection-explore {
+  overflow: hidden;
+}
+.collection-explore .collection-filter-panel {
+  margin: 0;
+}
+.collection-filter-panel > summary {
+  padding: 16px 20px;
+  font-size: 13px;
+}
+.collection-filter-panel[open] > summary {
+  margin-bottom: 0;
+}
+.collection-filters {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 20px;
+  align-items: end;
+}
+.collection-filters .field {
+  margin: 0;
+}
+.collection-grid {
+  display: grid;
+  gap: 22px;
+}
+.collection-card {
+  padding: 24px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.collection-card-heading {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+}
+.collection-card h3 {
+  font-size: 19px;
+  margin: 0 0 12px;
+}
+.collection-card h4 {
+  font-size: 13px;
+  margin: 20px 0 10px;
+}
+.collection-card p,
+.collection-card details {
+  font-size: 13px;
+}
+.collection-type {
+  color: var(--strong);
+  font-weight: 650;
+  margin: 0 0 8px;
+}
+.collection-badge {
+  align-self: start;
+  padding: 6px 10px;
+  background: var(--soft);
+  color: var(--strong);
+  border-radius: 8px;
+  font-size: 11px;
+  max-width: 100%;
+}
+.collection-address {
+  color: var(--muted);
+}
+.material-tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 0;
+}
+.material-tags li {
+  background: var(--soft);
+  color: var(--strong);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+.location-status {
+  padding: 12px;
+  background: #fff7e9;
+  color: #745017;
+  border-radius: 8px;
+}
+.collection-card details a {
+  display: block;
+  margin-top: 8px;
+}
+.collection-results {
+  padding-inline: 0;
+}
+.point-picker {
+  height: 240px;
+  margin-bottom: 18px;
+}
+.material-options {
+  border: 0;
+  padding: 0;
+  margin: 20px 0;
+  display: grid;
+  gap: 10px;
+}
+.material-options legend {
+  font-size: 13px;
+  font-weight: 650;
+  margin-bottom: 12px;
+}
+#point-form-errors {
+  color: #9f2330;
+  margin: 16px 0;
+  font-size: 13px;
+}
+#point-form-errors:empty {
+  margin: 0;
+}
+@media (min-width: 700px) {
+  .collection-filters {
+    grid-template-columns: 2fr 1fr 1fr auto;
+  }
+  .material-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1100px) {
+  .collection-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 @media (min-width: 700px) {
   .hero {
     grid-template-columns: 1.3fr 1fr;

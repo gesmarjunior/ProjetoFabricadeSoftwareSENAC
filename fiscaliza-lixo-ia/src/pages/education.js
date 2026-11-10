@@ -3,28 +3,7 @@ import { pageHeading } from '../components/layout.js';
 import { icon } from '../utils/icons.js';
 import { categoryPoints, volumePoints } from '../services/classificationService.js';
 import { escapeHtml as e } from '../utils/html.js';
-import { distanceKm } from '../utils/data.js';
 
-const ecopoints = [
-  {
-    name: 'Ecoponto didático Centro',
-    latitude: -16.68,
-    longitude: -49.26,
-    materials: 'Entulho em pequenas quantidades, recicláveis e poda.',
-  },
-  {
-    name: 'Ponto didático Vila Nova',
-    latitude: -16.67,
-    longitude: -49.24,
-    materials: 'Eletrônicos e pneus, mediante orientação de logística reversa.',
-  },
-  {
-    name: 'Coleta didática Jardim América',
-    latitude: -16.71,
-    longitude: -49.28,
-    materials: 'Papel, metal, plástico e vidro limpos e secos.',
-  },
-];
 const disposalGuidance = [
   [
     'Entulho e poda',
@@ -44,9 +23,9 @@ const disposalGuidance = [
   ],
 ];
 
-export function guidancePage(origin, mode = 'supabase') {
+export function guidancePage(_origin, _mode = 'supabase') {
   if (config.kind === 'waste')
-    return `${pageHeading('Descarte correto', 'Saiba como separar os materiais e encontrar o destino adequado.')}<div class="guidance-grid">${disposalGuidance.map(([title, text]) => `<section class="panel form-panel"><div class="feature-icon">${icon('leaf')}</div><h2>${title}</h2><p>${text}</p></section>`).join('')}</div><section class="panel prose"><h2>Antes de levar os materiais</h2><p>Confirme o endereço, o horário de funcionamento e os materiais aceitos com o serviço de coleta do seu município.</p><p>Não queime resíduos nem descarte materiais em terrenos, ruas ou cursos d’água. Ao encontrar resíduos perigosos, mantenha distância e procure o serviço responsável.</p></section>${mode === 'local' ? `<section><h2>Exemplos de ecopontos</h2><p class="notice">Os locais abaixo são fictícios e servem apenas para experimentar a demonstração.</p><div class="guidance-grid">${ecopoints.map((point) => `<section class="panel form-panel"><h3>${point.name}</h3><p>${point.materials}</p><p>Local fictício · ${point.latitude}, ${point.longitude}</p>${origin ? `<p>${distanceKm(origin, point).toLocaleString('pt-BR', { maximumFractionDigits: 1 })} km em linha reta do seu último registro.</p>` : ''}<a class="button secondary" target="_blank" rel="noopener noreferrer" href="https://www.openstreetmap.org/directions?engine=fossgis_osrm_car${origin ? `&route=${origin.latitude}%2C${origin.longitude}%3B${point.latitude}%2C${point.longitude}` : `&to=${point.latitude}%2C${point.longitude}`}">Ver rota do exemplo ↗</a></section>`).join('')}</div></section>` : ''}`;
+    return `${pageHeading('Descarte correto', 'Saiba como separar os materiais e encontrar o destino adequado.')}<section class="panel prose"><h2>Onde descartar em Itumbiara</h2><p>Consulte os ecopontos, os materiais recebidos e as condições de entrega. Você também pode sugerir novos locais e correções.</p><a class="button" href="#/collection-points">Ver ecopontos no mapa</a><p>Os ecopontos não recebem lixo doméstico comum. Utilize a coleta domiciliar regular para restos de comida e resíduos de banheiro.</p></section><div class="guidance-grid">${disposalGuidance.map(([title, text]) => `<section class="panel form-panel"><div class="feature-icon">${icon('leaf')}</div><h2>${title}</h2><p>${text}</p></section>`).join('')}</div><section class="panel prose"><h2>Antes de levar os materiais</h2><p>Confirme a entrada, o horário de funcionamento e os materiais aceitos com o serviço responsável.</p><p>Não queime resíduos nem descarte materiais em terrenos, ruas ou cursos d’água. Ao encontrar resíduos perigosos, mantenha distância e procure o serviço responsável.</p></section>`;
   return `${pageHeading('Orientação e encaminhamento', 'Ações simples ajudam a evitar condições favoráveis a um possível criadouro. Faça somente o que for seguro.')}<div class="guidance-grid">${[
     [
       'Elimine a água parada',

@@ -6,7 +6,7 @@ Execute `npm ci` e `npm run dev` na pasta do aplicativo. `index.html` carrega `s
 
 ## 2. Como a navegação funciona
 
-Links usam a parte da URL depois de `#`. O servidor continua entregando `index.html`; o JavaScript escolhe a tela. Assim é possível atualizar uma rota no GitHub Pages. As nove telas formam um fluxo: antes de persistir, a pessoa revisa o resultado; depois, os detalhes apresentam o registro salvo e seu acompanhamento.
+Links usam a parte da URL depois de `#`. O servidor continua entregando `index.html`; o JavaScript escolhe a tela. Assim é possível atualizar uma rota no GitHub Pages. As telas de ocorrências formam um fluxo: antes de persistir, a pessoa revisa o resultado; depois, os detalhes apresentam o registro salvo e seu acompanhamento. O catálogo de coleta acrescenta `#/collection-points`, o formulário de sugestão e o formulário de correção de informações, sem misturar estabelecimentos com denúncias.
 
 ## 3. Onde ficam as regras
 
@@ -35,6 +35,8 @@ Erros precisam chegar à UI; uma falha remota não pode produzir sucesso local f
 No banco, aplique as migrações `001 → 002 → 003`, somente se ainda faltarem no projeto, seguindo o preflight do README. A `001` define estrutura e acesso; a `002` impede repetir o mesmo caminho de foto; a `003` exige o upload no bucket correto e protege a foto já vinculada. Ela consulta apenas metadados com as policies SELECT. Um upload órfão continua removível para compensar uma rejeição definitiva. Não apague metadados de `storage.objects` manualmente: use a API do Storage para a limpeza autorizada.
 
 ## 5. Como formulário, mapa e dashboard usam dados
+
+O catálogo de locais de coleta usa uma lista própria e filtros de tipo, material e texto. Coordenadas aproximadas representam referências autorizadas de bairros/povoados; não representam a entrada dos ecopontos. Os cinco locais iniciais são reais, inclusive na cópia de referência da demonstração. Novas sugestões locais continuam somente no navegador; com Supabase, ficam pendentes no banco e visíveis somente ao autor até revisão. A distinção entre dados reais do catálogo e ocorrências fictícias da demonstração é intencional. Para aprovar sugestões e ajustar coordenadas oficiais, consulte [o guia de coleta](collection-points.md).
 
 O formulário coleta valores, valida a foto e aproxima coordenadas. A classificação explica os pontos. O envio só ocorre depois da revisão humana e bloqueia duplicidades enquanto aguarda o repositório. Em falha recuperável, os campos permanecem disponíveis para corrigir e tentar novamente.
 

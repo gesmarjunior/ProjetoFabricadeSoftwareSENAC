@@ -19,6 +19,8 @@ flowchart LR
 
 ## Persistência
 
+O catálogo de coleta usa `CollectionPointRepository`, com a mesma sessão Supabase do módulo de ocorrências e uma tabela independente, `fiscaliza_collection_points`. A leitura pagina com contagem exata. A projeção pública não inclui `created_by`. RLS permite ler unidades publicadas e somente as sugestões pendentes do próprio autor; INSERT é limitado a campos de proposta. O cliente não tem UPDATE, DELETE ou permissão para publicar. Correções usam `replaces_id` e não podem ser publicadas como unidades independentes. As migrações `004` e `005` instalam o módulo e os cinco ecopontos de Itumbiara, preservando ajustes posteriores do catálogo. A demonstração usa uma cópia de referência e sugestões locais, sem mascarar falhas de um backend configurado. Veja [o processo de validação e atualização de coordenadas](collection-points.md).
+
 `OccurrenceRepository` define operações assíncronas. A fábrica escolhe `LocalOccurrenceRepository` sem variáveis ou `SupabaseOccurrenceRepository` com configuração. O modo local identifica exemplos fictícios e persiste registros/fotos somente no dispositivo. Uma falha do backend configurado é mostrada, sem troca silenciosa para armazenamento local.
 
 No modo Supabase, `init()` restaura/cria a sessão anônima. `list()` combina as linhas próprias completas com a projeção comunitária, eliminando duplicatas por ID. `get()` conserva a distinção de acesso. `create()` exige revisão, envia a foto privada e grava a linha; uma falha não produz sucesso. `updateStatus()` envia somente o novo status e o banco gera o histórico.

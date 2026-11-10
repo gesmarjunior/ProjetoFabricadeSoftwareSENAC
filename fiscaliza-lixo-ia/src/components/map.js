@@ -4,11 +4,12 @@ import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { escapeHtml as e } from '../utils/html.js';
+import { hasPointCoordinates, pointMapUrl } from '../services/collectionPointService.js';
 
 /** Leaflet mantém controles de teclado e a atribuição OpenStreetMap. */
-export function mountMap(element, rows, { compact = false } = {}) {
+export function mountMap(element, rows, { compact = false, collection = false } = {}) {
   const map = L.map(element, { scrollWheelZoom: false, zoomControl: true }).setView(
-    [-16.68, -49.26],
+    collection ? [-18.42, -49.22] : [-16.68, -49.26],
     13,
   );
   const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -35,24 +36,33 @@ export function mountMap(element, rows, { compact = false } = {}) {
     layer.clearLayers();
     const points = [];
     nextRows.forEach((row) => {
+      if (collection && !hasPointCoordinates(row)) return;
       const position = [Number(row.latitude), Number(row.longitude)];
       if (!position.every(Number.isFinite)) return;
       points.push(position);
-      const color = { Baixo: '#087A58', Médio: '#8a5b00', Alto: '#b64a14', Crítico: '#ad2634' }[
-        row.risk_level
-      ];
+      const color = collection
+        ? '#087A58'
+        : { Baixo: '#087A58', Médio: '#8a5b00', Alto: '#b64a14', Crítico: '#ad2634' }[
+            row.risk_level
+          ];
       const marker = L.marker(position, {
         icon: L.divIcon({
           className: 'map-marker',
-          html: `<span style="background:${color}"><b>${e(row.risk_level.slice(0, 1))}</b></span>`,
+          html: `<span style="background:${color}"><b>${collection ? 'C' : e(row.risk_level.slice(0, 1))}</b></span>`,
           iconSize: [32, 40],
           iconAnchor: [16, 36],
         }),
-        title: `${row.classification}, ${row.district}, ${row.risk_level}`,
-        alt: `Registro de ${row.classification} com nível ${row.risk_level}`,
+        title: collection
+          ? `${row.name} — ${row.location_precision === 'confirmed' ? 'Localização confirmada' : 'Referência aproximada; confirme a entrada'}`
+          : `${row.classification}, ${row.district}, ${row.risk_level}`,
+        alt: collection
+          ? `Local de coleta: ${row.name}`
+          : `Registro de ${row.classification} com nível ${row.risk_level}`,
       });
       marker.bindPopup(
-        `<strong>${e(row.classification)}</strong><p>${e(row.district)} · ${e(row.risk_level)}</p><a href="#/details/${encodeURIComponent(row.id)}">Ver detalhes do registro</a>`,
+        collection
+          ? `<strong>${e(row.name)}</strong><p>${e(row.site_type)} · ${e(row.address)}</p><p>${row.location_precision === 'confirmed' ? 'Localização confirmada.' : 'Referência aproximada; confirme a entrada antes de ir.'}</p><p>Aceita: ${e(row.accepted_materials.join(', '))}.</p><a href="${e(pointMapUrl(row))}" target="_blank" rel="noopener noreferrer">Consultar endereço ↗</a>`
+          : `<strong>${e(row.classification)}</strong><p>${e(row.district)} · ${e(row.risk_level)}</p><a href="#/details/${encodeURIComponent(row.id)}">Ver detalhes do registro</a>`,
       );
       layer.addLayer(marker);
     });
@@ -61,6 +71,7 @@ export function mountMap(element, rows, { compact = false } = {}) {
         maxZoom: 14,
         animate: false,
       });
+    if (!points.length && collection) map.setView([-18.42, -49.22], 12, { animate: false });
     if (resizeFrame !== undefined) cancelAnimationFrame(resizeFrame);
     resizeFrame = requestAnimationFrame(() => {
       resizeFrame = undefined;
@@ -84,5 +95,30 @@ export function mountMap(element, rows, { compact = false } = {}) {
       if (resizeFrame !== undefined) cancelAnimationFrame(resizeFrame);
       map.remove();
     },
+  };
+}
+
+/** Os campos numéricos oferecem uma alternativa à seleção com o mouse. */
+export function mountPointPicker(element, onPick, initial = null) {
+  const map = L.map(element, { scrollWheelZoom: false }).setView([-18.42, -49.22], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
+  let marker;
+  if (initial && hasPointCoordinates(initial)) {
+    const position = [Number(initial.latitude), Number(initial.longitude)];
+    marker = L.marker(position).addTo(map);
+    map.setView(position, 14);
+  }
+  map.on('click', ({ latlng }) => {
+    if (marker) marker.setLatLng(latlng);
+    else marker = L.marker(latlng).addTo(map);
+    onPick(latlng.lat, latlng.lng);
+  });
+  return () => {
+    map.stop();
+    map.remove();
   };
 }

@@ -4,7 +4,7 @@ Registrar, classificar, mapear e priorizar descarte irregular de resíduos urban
 
 O projeto mantém “IA” no nome, mas a versão atual usa regras transparentes e não interpreta a foto. Uma API real de visão computacional é uma evolução futura.
 
-Aplicativo educacional mobile-first com nove telas: início, formulário, resultado revisável, mapa, detalhes, dashboard, orientação, acompanhamento e sobre/educação/privacidade. Toda a interface e a documentação estão em português do Brasil.
+Aplicativo educacional mobile-first com registro de ocorrências, mapa, indicadores, orientação e catálogo de locais de coleta. Toda a interface e a documentação estão em português do Brasil.
 
 ## Instalar e executar
 
@@ -44,7 +44,9 @@ Os snapshots usam Chromium e animações desativadas, cobrindo 390×844, 768×10
 
 Início → Novo registro → validar foto, descrição, bairro e coordenadas aproximadas → calcular e explicar os pontos → pessoa confirma ou corrige a categoria → salvar → detalhes e orientação → acompanhar status. Mapa e dashboard leem o mesmo repositório após alterações. Rotas hash funcionam ao recarregar a página em hospedagem estática.
 
-A tela **Descarte correto** oferece orientações por material. Locais fictícios, distâncias e rotas de exemplo aparecem somente na demonstração local. A versão conectada não apresenta endereços de ecopontos sem cadastro verificado.
+A tela **Descarte correto** oferece orientações por material e acesso ao catálogo **Pontos de coleta** (`#/collection-points`). O catálogo inclui os cinco ecopontos de Itumbiara informados pelo usuário, com referências aproximadas dos bairros e povoados autorizadas em 10/11/2026. As fontes municipais confirmam a existência das unidades e a regra de não receber lixo doméstico comum; os detalhes complementares e as entradas ainda precisam de confirmação. Os marcadores não representam as entradas. Veja [o guia de cadastro e validação](docs/collection-points.md).
+
+Visitantes podem sugerir ecopontos, unidades de coleta seletiva, cooperativas, aterros sanitários, estações de transbordo e correções. As sugestões ficam pendentes e só seu autor pode consultá-las no mesmo navegador até a revisão. A publicação, os ajustes de coordenadas e a aplicação de correções são feitos pelo responsável no Supabase, sem poderes administrativos no cliente. Para instalar esse módulo em outro banco, aplique `004_collection_points.sql` e depois `005_itumbiara_collection_catalog.sql`, uma única vez, após as migrações anteriores. O catálogo de referência da demonstração é independente dos ajustes posteriores feitos no banco hospedado.
 
 | Categoria      | Pontos |
 | -------------- | -----: |
