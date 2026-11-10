@@ -106,15 +106,26 @@ export function mountPointPicker(element, onPick, initial = null) {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
+  // O ícone vetorial evita a autodetecção de PNGs do Leaflet, que falha em builds sob subcaminhos.
+  const markerOptions = {
+    icon: L.divIcon({
+      className: 'map-marker',
+      html: '<span style="background:#087A58"><b>C</b></span>',
+      iconSize: [32, 40],
+      iconAnchor: [16, 36],
+    }),
+    title: 'Referência aproximada do local de coleta',
+    alt: 'Referência do local de coleta',
+  };
   let marker;
   if (initial && hasPointCoordinates(initial)) {
     const position = [Number(initial.latitude), Number(initial.longitude)];
-    marker = L.marker(position).addTo(map);
+    marker = L.marker(position, markerOptions).addTo(map);
     map.setView(position, 14);
   }
   map.on('click', ({ latlng }) => {
     if (marker) marker.setLatLng(latlng);
-    else marker = L.marker(latlng).addTo(map);
+    else marker = L.marker(latlng, markerOptions).addTo(map);
     onPick(latlng.lat, latlng.lng);
   });
   return () => {

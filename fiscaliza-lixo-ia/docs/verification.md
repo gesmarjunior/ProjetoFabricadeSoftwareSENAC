@@ -14,6 +14,10 @@ Separadamente, um teste transacional no **Supabase real** confirmou INSERT de su
 
 O cadastro e a sugestão de correções estão disponíveis na interface; publicação e ajustes oficiais exigem a conta responsável no Supabase. Não existe administrador no cliente. Horários, licenças, acesso e posições exatas não são certificados pelo aplicativo. Os registros históricos abaixo documentam verificações anteriores e não substituem esta rodada.
 
+A primeira conferência publicada detectou uma diferença entre Vite e o build estático: o marcador padrão do seletor tentava buscar `marker-icon.png` e `marker-shadow.png` na raiz do aplicativo, recebendo 404. O seletor passou a usar um marcador vetorial explícito, como o catálogo, sem autodetecção de arquivos do Leaflet. Os testes de cadastro e correção agora verificam a presença desse marcador. Essa ocorrência foi encontrada na validação do endereço público; os testes anteriores no servidor de desenvolvimento não a identificaram.
+
+Após a correção, os seis testes do módulo passaram novamente, assim como lint, formatação e build. O pacote estático foi servido no mesmo subcaminho do GitHub Pages e testado em desktop e celular, com leitura real do Supabase, filtros, cadastro, seleção de coordenadas, abertura da correção e recarregamento. Não houve erro de console, de recurso ou de API nessa rodada de produção local.
+
 Atualização documental: 05/11/2026. Última verificação consolidada: 05/11/2026. Ambiente: Windows, Node.js 24.16.0, npm 11.13.0 e Chromium do Playwright 1.64.1. O plugin Browser não estava disponível; foi usado Playwright diretamente.
 
 Os resultados atuais incluem a revisão concluída em 05/11, com as etapas de verificação aprovadas nos dois apps e inspeção visual com Supabase e mapas reais. As etapas anteriores e a inspeção do build em subcaminho estão identificadas por data. As 16 baselines de cada app foram comparadas na execução final. A primeira revisão atualizou 19 imagens; a segunda revisão de linguagem atualizou as 32, após inspeção das capturas.

@@ -41,8 +41,10 @@ test('cadastro persiste como sugestão e não substitui locais publicados', asyn
     .getByLabel('Descrição *', { exact: true })
     .fill('Local fictício usado somente nos testes de demonstração.');
   await page.getByLabel('Metal', { exact: true }).check();
-  await page.getByLabel('Latitude', { exact: true }).fill('-18.42');
-  await page.getByLabel('Longitude', { exact: true }).fill('-49.21');
+  await page.locator('#point-picker').click({ position: { x: 130, y: 90 } });
+  await expect(page.getByLabel('Latitude', { exact: true })).not.toHaveValue('');
+  await expect(page.getByLabel('Longitude', { exact: true })).not.toHaveValue('');
+  await expect(page.locator('#point-picker .map-marker')).toBeVisible();
   await page.getByLabel('Conferi as informações', { exact: false }).check();
   await page.getByRole('button', { name: 'Enviar para validação' }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Pontos de coleta');
@@ -67,6 +69,7 @@ test('correção é enviada para validação sem alterar o cadastro original', a
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(
     'Corrigir informações de um local',
   );
+  await expect(page.locator('#point-picker .map-marker')).toBeVisible();
   const name = await page.getByLabel('Nome do local *', { exact: true }).inputValue();
   await page.getByLabel('Endereço *', { exact: true }).fill('Endereço atualizado de teste, 200');
   await page.getByLabel('Conferi as informações', { exact: false }).check();
