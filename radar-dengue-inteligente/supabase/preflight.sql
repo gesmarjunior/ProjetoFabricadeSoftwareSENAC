@@ -8,9 +8,14 @@ select
   to_regprocedure('public.get_dengue_community_occurrences()') is not null as community_rpc,
   to_regclass('public.dengue_unique_photo_submission_idx') is not null as unique_photo_index;
 
+-- Diretório institucional acrescentado por 004 + 005.
+select to_regclass('public.dengue_health_facilities') is not null as health_catalog_exists,
+  (select relrowsecurity from pg_class
+   where oid=to_regclass('public.dengue_health_facilities')) as health_catalog_rls;
+
 select schemaname, tablename, policyname, roles, cmd, qual, with_check
 from pg_policies
-where (schemaname = 'public' and tablename = 'dengue_occurrences')
+where (schemaname = 'public' and tablename in ('dengue_occurrences','dengue_health_facilities'))
    or (schemaname = 'storage' and tablename = 'objects')
 order by schemaname, tablename, policyname;
 
@@ -18,15 +23,15 @@ select id, name, public, file_size_limit, allowed_mime_types
 from storage.buckets where id = 'dengue-photos';
 
 select indexname, indexdef from pg_indexes
-where schemaname = 'public' and tablename = 'dengue_occurrences'
+where schemaname = 'public' and tablename in ('dengue_occurrences','dengue_health_facilities')
 order by indexname;
 
-select grantee, privilege_type,
+select table_name, grantee, privilege_type,
        string_agg(column_name, ', ' order by column_name) as columns
 from information_schema.column_privileges
-where table_schema = 'public' and table_name = 'dengue_occurrences'
+where table_schema = 'public' and table_name in ('dengue_occurrences','dengue_health_facilities')
   and grantee in ('authenticated', 'anon', 'PUBLIC')
-group by grantee, privilege_type order by grantee, privilege_type;
+group by table_name, grantee, privilege_type order by table_name, grantee, privilege_type;
 
 -- Esperado após 001 + 002: os cinco indicadores iniciais são true;
 -- três policies próprias na tabela e três no Storage; bucket privado de 5 MiB;

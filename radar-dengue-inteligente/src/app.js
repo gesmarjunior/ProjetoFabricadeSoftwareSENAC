@@ -9,6 +9,12 @@ import { explorePage, bindExplore } from './pages/explore.js';
 import { detailsPage, bindDetails } from './pages/details.js';
 import { dashboardPage, mountCharts } from './pages/dashboard.js';
 import { guidancePage, aboutPage } from './pages/education.js';
+import {
+  healthFacilitiesPage,
+  bindHealthFacilities,
+  healthFacilityForm,
+  bindHealthFacilityForm,
+} from './pages/healthFacilities.js';
 
 /** Coordena navegação e dados; cada página mantém sua apresentação e eventos. */
 export async function startApp() {
@@ -101,11 +107,63 @@ export async function startApp() {
     cleanup();
     cleanup = () => {};
     closeMenu();
+    const modeMessage = document.querySelector('[data-mode-message]');
+    if (modeMessage)
+      modeMessage.innerHTML = route.startsWith('/health-services')
+        ? '<strong>Demonstração</strong> · Catálogo de referência. Novas sugestões ficam somente neste navegador.'
+        : '<strong>Demonstração</strong> · Você está usando dados de exemplo. Os registros ficam neste navegador.';
     setActiveRoute(route.startsWith('/details/') ? '/tracking' : route);
     main.setAttribute('aria-busy', 'true');
     main.innerHTML = '<p role="status" class="loading">Carregando os registros…</p>';
     const pending = [];
     try {
+      if (
+        route === '/health-services' ||
+        route === '/health-services/new' ||
+        route.startsWith('/health-services/suggest/')
+      ) {
+        const facilities = await app.healthRepo.list();
+        if (version !== renderVersion) return;
+        if (route === '/health-services') {
+          main.innerHTML = healthFacilitiesPage(facilities);
+          const { mountHealthMap } = await import('./components/healthMap.js');
+          if (version !== renderVersion) return;
+          const map = mountHealthMap(document.querySelector('#health-map'), facilities);
+          pending.push(() => map.destroy());
+          pending.push(bindHealthFacilities(facilities, map));
+        } else {
+          const original = route.startsWith('/health-services/suggest/')
+            ? facilities.find(
+                (row) =>
+                  row.id === route.slice('/health-services/suggest/'.length) &&
+                  row.publication_status === 'published',
+              )
+            : null;
+          if (route.startsWith('/health-services/suggest/') && !original)
+            throw new Error('Unidade não encontrada.');
+          main.innerHTML = healthFacilityForm(original);
+          pending.push(bindHealthFacilityForm(app, original));
+          const { mountHealthPicker } = await import('./components/healthMap.js');
+          if (version !== renderVersion) {
+            pending.forEach((dispose) => dispose?.());
+            return;
+          }
+          pending.push(
+            mountHealthPicker(
+              document.querySelector('#health-picker'),
+              (lat, lng) => {
+                document.querySelector('#facility-lat').value = lat.toFixed(6);
+                document.querySelector('#facility-lng').value = lng.toFixed(6);
+                document.querySelector('#health-picked').textContent =
+                  'Referência aproximada selecionada. Confira os valores antes de enviar.';
+              },
+              original,
+            ),
+          );
+        }
+        cleanup = () => pending.forEach((dispose) => dispose?.());
+        return;
+      }
       const rows = await app.repo.list();
       if (version !== renderVersion) return;
       if (route === '/') {

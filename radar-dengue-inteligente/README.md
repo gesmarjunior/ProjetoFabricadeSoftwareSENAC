@@ -4,7 +4,7 @@ Apoiar a prevenção de condições ambientais favoráveis a possíveis criadour
 
 O resultado é um risco ambiental estimado, sem diagnóstico ou confirmação de foco. A ferramenta não substitui equipes de saúde ou vigilância.
 
-Aplicativo educacional mobile-first com nove telas: início, formulário, resultado revisável, mapa, detalhes, dashboard, orientação, acompanhamento e sobre/educação/privacidade. Toda a interface e a documentação estão em português do Brasil.
+Aplicativo educacional mobile-first com registro de risco ambiental, mapas, indicadores, orientação e diretório de serviços de saúde de Itumbiara. Toda a interface e a documentação estão em português do Brasil.
 
 ## Instalar e executar
 
@@ -17,7 +17,13 @@ npm run dev
 
 Abra a URL exibida pelo Vite. No PowerShell que bloqueia scripts, use `npm.cmd` e `npx.cmd`, sem alterar a política de execução. O lockfile entregue permite instalações reproduzíveis; para instalar sem lockfile pela primeira vez, use `npm install`.
 
-Sem credenciais configuradas, o app abre em **Demonstração**. Os exemplos são fictícios. Novos registros e fotos ficam apenas no `localStorage` do navegador e dispositivo; não há sincronização remota. Limpar os dados do navegador apaga essa demonstração. Cota indisponível ou armazenamento bloqueado resulta em mensagem de erro, sem falso sucesso.
+Sem credenciais configuradas, o app abre em **Demonstração**. As ocorrências de exemplo são fictícias; o diretório de saúde contém uma cópia de referência dos locais reais, com fontes e posições aproximadas. Novos registros, sugestões e fotos ficam apenas no `localStorage` do navegador e dispositivo; não há sincronização remota. Limpar os dados do navegador apaga essa demonstração. Cota indisponível ou armazenamento bloqueado resulta em mensagem de erro, sem falso sucesso.
+
+## Serviços de saúde de Itumbiara
+
+Em **Serviços de saúde** (`#/health-services`), consulte doze locais iniciais: endemias, vigilância sanitária, NABS, CAIS, seis unidades básicas/clínicas, UPA e hospital municipal. Há mapa, busca por nome/endereço/bairro/CNES, filtros de tipo e serviço, cadastro e sugestão de correção. Os marcadores são referências aproximadas de regiões, editáveis pelo responsável no Supabase. O Centro de Endemias foi cadastrado na **Rua Wilson Barbosa, 325, Jardim América**, conforme informação do usuário.
+
+Novas sugestões aguardam validação e só ficam visíveis para seu autor até a aprovação. O cadastro não garante agenda, atendimento ou estoque de vacina; nenhuma unidade inicial foi classificada como oferta atual de vacinação confirmada. Veja [fontes, divergências e instruções para validar e ajustar os locais](docs/health-services.md).
 
 ## Comandos
 
@@ -70,7 +76,7 @@ Antes de aplicar migrações em um projeto existente, execute [supabase/prefligh
 1. Use um projeto Supabase existente ou crie-o manualmente para uma nova instalação. Os scripts do aplicativo não criam serviços externos e não incluem credenciais reais.
 2. Em **Authentication → Sign In / Providers**, habilite **Anonymous Sign-Ins**. A sessão recebe um UUID Auth sem exigir nome, e-mail ou telefone. Veja [autenticação anônima](https://supabase.com/docs/guides/auth/auth-anonymous).
 3. No **SQL Editor**, execute, em ordem, `supabase/migrations/001_initial_schema.sql`, `supabase/migrations/002_unique_photo_submission.sql` e `supabase/migrations/003_require_uploaded_photo.sql`. Aplique somente as migrações que faltarem após o preflight; não reaplique a `001`. A primeira cria a estrutura, a segunda impede repetir o caminho da foto e a terceira exige metadados do upload no bucket correto e protege fotos referenciadas contra exclusão. As migrações não apagam registros. Se houver caminhos duplicados num banco antigo, revise-os antes da `002`; a `003` não corrige referências antigas automaticamente.
-4. Opcionalmente execute `supabase/seed.sql`. O seed é idempotente por UUID e contém exemplos fictícios, sem contas Auth reais. As linhas `is_demo` são somente para leitura comunitária e não podem ser criadas ou editadas por cidadãos.
+4. Aplique depois `supabase/migrations/004_health_facilities.sql` e `supabase/migrations/005_itumbiara_health_catalog.sql`, somente se faltarem. Elas criam o diretório moderado e os doze locais reais de referência, preservando ajustes posteriores. Separadamente, `supabase/seed.sql` é opcional e contém ocorrências fictícias; não é o catálogo de saúde. As linhas `is_demo` dessas ocorrências são somente para leitura comunitária e não podem ser criadas ou editadas por cidadãos.
 5. Confira a tabela `dengue_occurrences`, a função `get_dengue_community_occurrences()` e o bucket privado `dengue-photos`. A migração cria as policies do Storage; mantenha o bucket privado. Veja [controle de acesso](https://supabase.com/docs/guides/storage/security/access-control).
 6. Em **Project Settings → API / API Keys**, copie a URL e a **publishable key**. Nunca use chave secreta ou privilegiada de servidor no navegador.
 7. Copie `.env.example` para `.env.local` e preencha apenas as variáveis abaixo. Não envie `.env.local` ao Git.

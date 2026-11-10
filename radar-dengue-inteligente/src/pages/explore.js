@@ -6,7 +6,7 @@ import { filterOccurrences } from '../utils/data.js';
 import { icon } from '../utils/icons.js';
 
 export function explorePage(rows, isMap = false) {
-  return `${pageHeading(isMap ? (config.kind === 'waste' ? 'Mapa de ocorrências' : 'Mapa de risco ambiental') : 'Acompanhamento dos registros', isMap ? 'Veja os registros perto de você e filtre por bairro ou situação.' : 'Consulte os registros e acompanhe o que mudou no seu bairro.', `<a class="button" href="#/new">${icon('plus')}Novo registro</a>`)}
+  return `${pageHeading(isMap ? (config.kind === 'waste' ? 'Mapa de ocorrências' : 'Mapa de risco ambiental') : 'Acompanhamento dos registros', isMap ? 'Veja os registros perto de você e filtre por bairro ou situação.' : 'Consulte os registros e acompanhe o que mudou no seu bairro.', `<div class="button-row">${isMap ? '<a class="button secondary" href="#/health-services">Serviços de saúde</a>' : ''}<a class="button" href="#/new">${icon('plus')}Novo registro</a></div>`)}
     <section class="panel explore-panel">${filters(rows)}${isMap ? '<div id="occurrences-map" class="map full-map" aria-label="Mapa filtrado dos registros"></div><p class="map-note" data-map-status>Amplie o mapa para ver os registros mais próximos.</p>' : '<label class="checkbox mine-filter"><input id="only-mine" type="checkbox" /> <span>Mostrar somente meus registros</span></label>'}
     <div class="results-heading"><h2>${isMap ? 'Registros no mapa' : 'Registros da comunidade'}</h2><p id="filter-count" role="status">${rows.length} registros encontrados</p></div><div id="filtered-list">${occurrenceList(rows)}</div></section>`;
 }

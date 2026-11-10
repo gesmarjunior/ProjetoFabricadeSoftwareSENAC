@@ -31,6 +31,12 @@ O repositório local valida a estrutura de cada registro, as datas, coordenadas,
 
 ## Privacidade e autoridade
 
+O diretório institucional usa `HealthFacilityRepository`, a mesma sessão anônima do adaptador de ocorrências e a tabela independente `dengue_health_facilities`. As rotas `#/health-services`, `/new` e `/suggest/{id}` leem uma projeção explícita sem autoria, paginada e com contagem exata. Na demonstração, o catálogo de referência é combinado com sugestões locais validadas, sem substituir dados corrompidos. Não há imports da pasta do Fiscaliza.
+
+As migrações `004 → 005`, após as três de ocorrências, adicionam o catálogo e seu seed. RLS permite leitura pública de unidades publicadas e leitura de sugestões pendentes somente pelo autor. Grants de INSERT não incluem publicação, autoria ou data de conferência; UPDATE e DELETE não são concedidos ao navegador. Correções referenciam o original e precisam ser aplicadas nele pelo responsável. A publicação exige data de conferência e CNES único entre locais publicados. Um serviço declarado como informado exige fonte. Consulte [o fluxo de validação institucional](health-services.md).
+
+O módulo de mapa de saúde é carregado sob demanda. Agrupamentos permitem expandir unidades com a mesma referência regional; os ícones vetoriais evitam caminhos de PNG dependentes da hospedagem. Os filtros operam sobre a mesma lista usada pelos cartões e pelo total. Fontes e posições aproximadas não confirmam agenda, estoque, elegibilidade ou vacinação contra dengue.
+
 `dengue_occurrences` tem RLS e grants por coluna. A função `get_dengue_community_occurrences()` usa `SECURITY DEFINER`, `search_path` vazio, exige `auth.uid()` e retorna uma lista fixa de campos. Não retorna autor, relato livre, foto ou histórico. Alterar essa lista exige revisão de privacidade.
 
 O bucket `dengue-photos` é privado, aceita JPEG/PNG/WebP até 5 MiB e exige UUID do usuário na primeira pasta. Somente o autor envia e lê suas fotos. A migração `003` permite remover uploads órfãos, mas bloqueia a exclusão de fotos referenciadas por ocorrências próprias. Não existe policy de sobrescrita; a leitura usa URL assinada temporária. As tabelas de ocorrências não possuem campos de nome, telefone, e-mail ou documento do cidadão.

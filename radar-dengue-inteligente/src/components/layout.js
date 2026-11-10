@@ -5,6 +5,7 @@ const navigation = [
   ['/', 'Início', 'home'],
   ['/new', 'Novo registro', 'plus'],
   ['/map', 'Mapa', 'map'],
+  ['/health-services', 'Serviços de saúde', 'shield'],
   ['/dashboard', 'Indicadores', 'chart'],
   ['/guidance', config.guidanceLabel, 'leaf'],
   ['/tracking', 'Acompanhamento', 'track'],
@@ -16,7 +17,7 @@ export function layout(mode) {
     <nav aria-label="Navegação principal">${navigation.map(([path, label, name]) => `<a href="#${path}" data-route="${path}">${icon(name)}<span>${label}</span></a>`).join('')}</nav>
     <div class="sidebar-note">${icon('shield')}<p>Cuide do seu bairro.<br />Participe da mudança.</p></div></aside>
     <div class="workspace"><header class="topbar"><a class="mobile-brand" href="#/">${icon(config.kind === 'waste' ? 'leaf' : 'target')}${config.shortName}</a><span class="desktop-title">${config.subtitle}</span><a class="text-link desktop-title" href="#/about">Como funciona ${icon('arrow')}</a></header>
-    ${mode === 'local' ? `<div class="mode-banner">${icon('info')}<span><strong>Demonstração</strong> · Você está usando dados de exemplo. Os registros ficam neste navegador.</span></div>` : ''}
+    ${mode === 'local' ? `<div class="mode-banner">${icon('info')}<span data-mode-message><strong>Demonstração</strong> · Você está usando dados de exemplo. Os registros ficam neste navegador.</span></div>` : ''}
     <main id="main" tabindex="-1" aria-busy="true"><p role="status">Carregando os registros…</p></main>
     <footer class="footer"><span>${config.name}</span><a href="#/about">Sobre e privacidade</a></footer></div>
     <nav class="bottom-nav" aria-label="Navegação rápida">${navigation
@@ -29,7 +30,7 @@ export function layout(mode) {
         '',
       )}<button type="button" id="more-menu" aria-expanded="false" aria-controls="mobile-menu">${icon('info')}<span>Mais</span></button></nav>
     <nav id="mobile-menu" class="mobile-menu" aria-label="Mais páginas" hidden>${navigation
-      .filter(([path]) => ['/dashboard', '/guidance', '/about'].includes(path))
+      .filter(([path]) => ['/health-services', '/dashboard', '/guidance', '/about'].includes(path))
       .map(([path, label, name]) => `<a href="#${path}">${icon(name)}${label}</a>`)
       .join('')}</nav>
     <div id="notification" class="notification" role="status" aria-live="polite"></div>`;

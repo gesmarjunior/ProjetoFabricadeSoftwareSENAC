@@ -1,6 +1,23 @@
 # Verificação da entrega — Radar da Dengue Inteligente
 
-Atualização documental: 05/11/2026. Última verificação consolidada: 05/11/2026. Ambiente: Windows, Node.js 24.16.0, npm 11.13.0 e Chromium do Playwright 1.64.1. O plugin Browser não estava disponível; foi usado Playwright diretamente.
+Atualização documental: 10/11/2026. Última verificação do diretório de saúde: 10/11/2026. Ambiente: Windows, Node.js 24.16.0, npm 11.13.0 e Chromium do Playwright 1.64.1. O plugin Browser não estava disponível; foi usado Playwright diretamente. As seções de 03 a 05/11 abaixo são históricas, inclusive suas observações sobre ausência de publicação naquele momento.
+
+## Diretório de saúde — 10/11/2026
+
+Implementadas consulta, mapa, filtros, cadastro e sugestões de correção de unidades de Itumbiara. O catálogo contém doze locais reais de referência, todos com posição aproximada identificada. O endereço informado pelo usuário para Endemias foi adotado, com a divergência do CNES registrada. Fontes, limites e aprovação pelo responsável estão em [health-services.md](health-services.md).
+
+- Lint, formatação e build aprovados. Vitest: **243 testes aprovados em 10 arquivos**, com 99,12% de linhas, 100% de funções, 95,52% de branches e 98,85% de statements nos módulos selecionados.
+- Playwright: **47 testes aprovados**, incluindo os 41 anteriores e seis do diretório: catálogo/filtros, sugestão privada pendente, correção com fonte obrigatória, duas verificações Axe em celular e uso dos filtros recolhidos. As duas referências móveis alteradas pelos atalhos foram abertas e revisadas antes de atualizadas; a execução final comparou todos os snapshots sem atualização automática.
+- As migrações `004_health_facilities.sql` e `005_itumbiara_health_catalog.sql` passaram em **21 verificações PGlite**, incluindo seed idempotente, preservação de ajustes, RLS, grants, publicação com data de conferência, fonte para serviço declarado e CNES publicado único.
+- Após preflight, ambas as migrações foram aplicadas ao Supabase `webapp-fs`, com sucesso. A tabela está com RLS, doze unidades publicadas e aproximadas, nenhuma sugestão pendente e nenhuma vacinação inicial marcada como informada/confirmada.
+- Testes transacionais no banco real confirmaram envio pendente, leitura própria, ausência de autoria na projeção, bloqueio de publicação/UPDATE/DELETE pelo cliente, bloqueio de data de conferência forjada e de serviço declarado sem fonte, ocultação entre visitantes e catálogo público de doze linhas. Foi executado ROLLBACK; nenhum registro de teste persistiu.
+- A inspeção do build de produção com Supabase e tiles reais passou em **20 verificações**: HTTP 200, catálogo de doze, filtros com 2 vigilâncias/endemias, 8 vacinações a confirmar e 0 informadas, endereço de Endemias, ícone vetorial, formulário/correção, recarregamento e ausência de overflow em 320, 390, 768 e 1440 px. Nenhuma sugestão foi enviada nessa inspeção; não houve erro relevante de console, página ou HTTP. Capturas foram abertas e revisadas, incluindo cartão de fontes e campos de serviços.
+
+Os relatórios desta atualização e as capturas de inspeção estão fora do código, em `%TEMP%/senac-saude-20261110/`. A consulta ao advisor de segurança não indicou problema específico na nova tabela; ainda apresentou avisos nas funções `SECURITY DEFINER` preexistentes, nas policies de sessão anônima e na configuração de proteção de senhas. Esses avisos não foram ocultados nem tratados como uma auditoria de segurança aprovada. Referências: [funções públicas](https://supabase.com/docs/guides/database/database-linter?lint=0028_anon_security_definer_function_executable), [funções de usuários autenticados](https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable), [policies anônimas](https://supabase.com/docs/guides/database/database-advisors?queryGroups=lint&lint=0012_auth_allow_anonymous_sign_ins) e [proteção de senhas](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection).
+
+O diretório não armazena dados de pacientes nem confirma oferta atual de vacina, estoque ou elegibilidade. A aprovação institucional ocorre pelo responsável no Supabase; não existe administração privilegiada no navegador. A sessão anônima continua sem recuperação após sua perda.
+
+## Histórico de verificação até 05/11/2026
 
 Os resultados atuais incluem a revisão concluída em 05/11, com as etapas de verificação aprovadas nos dois apps e inspeção visual com Supabase e mapas reais. As etapas anteriores e a inspeção do build em subcaminho estão identificadas por data. As 16 baselines de cada app foram comparadas na execução final. A primeira revisão atualizou 19 imagens; a segunda revisão de linguagem atualizou as 32, após inspeção das capturas.
 

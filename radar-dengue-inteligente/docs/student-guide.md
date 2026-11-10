@@ -74,6 +74,8 @@ Os resultados de Supabase real são distintos dos mocks e dos testes PGlite. Em 
 
 ## 7. Exercícios seguros
 
+O diretório de saúde tem seu próprio serviço, repositório e mapa, mas compartilha a sessão Supabase. Estude `healthFacilityService.js`, `HealthFacilityRepository.js` e as migrações `004 → 005` para acompanhar o envio de uma sugestão até a revisão pelo responsável. A demonstração separa ocorrências fictícias de um catálogo de referência de unidades reais. Fonte e data de consulta não garantem serviços disponíveis hoje. Veja [as fontes e o procedimento de moderação](health-services.md).
+
 1. Escreva um teste de uma combinação de pontos antes de alterar a função; explique a soma.
 2. Crie um filtro e verifique que mapa, lista e total representam o mesmo conjunto.
 3. Melhore um estado vazio e teste a tela por teclado em 320 px.

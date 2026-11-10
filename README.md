@@ -24,7 +24,9 @@ npm.cmd run dev -- --port 5173
 npm.cmd run dev -- --port 5174
 ```
 
-Sem variáveis de ambiente, os aplicativos funcionam em **Demonstração**, com dados fictícios e persistência somente no navegador. Nesta cópia de trabalho, os dois apps já usam o projeto Supabase `webapp-fs`, com autenticação anônima, tabelas protegidas por RLS e buckets privados. Os arquivos `.env.local` contêm somente a URL e a chave publicável e são ignorados pelo Git. Quem copiar os projetos deve configurar seu próprio ambiente conforme os READMEs.
+Sem variáveis de ambiente, os aplicativos funcionam em **Demonstração**, com ocorrências fictícias, catálogos de referência de locais reais e novas informações persistidas somente no navegador. Nesta cópia de trabalho, os dois apps já usam o projeto Supabase `webapp-fs`, com autenticação anônima, tabelas protegidas por RLS e buckets privados. Os arquivos `.env.local` contêm somente a URL e a chave publicável e são ignorados pelo Git. Quem copiar os projetos deve configurar seu próprio ambiente conforme os READMEs.
+
+O FiscalizaLixo inclui [ecopontos e locais de coleta de Itumbiara](fiscaliza-lixo-ia/docs/collection-points.md). O Radar inclui [endemias, vigilância sanitária e unidades de saúde](radar-dengue-inteligente/docs/health-services.md). Os catálogos têm mapas com posições inicialmente aproximadas, busca e sugestões sujeitas a validação. A presença de uma unidade de saúde no catálogo não confirma vacinação, agenda ou atendimento disponível no momento.
 
 A classificação atual usa regras explicadas e revisão humana. Não há IA visual real nem envio automático para órgãos públicos. O Radar apoia a prevenção ambiental e não substitui equipes de saúde ou vigilância.
 
